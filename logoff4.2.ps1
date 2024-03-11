@@ -37,16 +37,13 @@ while ($true) {
 
   $currentInputTime = [UserInputDetector]::GetLastInputTime()
   if ($currentInputTime -gt $lastInputTime) {
-    # Abrir la cámara
+
     Start-Process microsoft.windows.camera:
 
-    # Esperar 10 segundos (ajustable según necesidad)
-    Start-Sleep -Seconds 10
+    Start-Sleep -Seconds 15
 
-    # Presionar Enter
     [System.Windows.Forms.SendKeys]::SendWait("{ENTER}")
 
-    # Bloquear la estación de trabajo
     [UserInputDetector]::LockWorkStation()
     break
   }
