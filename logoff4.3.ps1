@@ -43,6 +43,8 @@ while ($true) {
     Start-Sleep -Seconds 15
 
     [System.Windows.Forms.SendKeys]::SendWait("{ENTER}")
+    Start-Process microsoft.windows.camera:
+    [System.Windows.Forms.SendKeys]::SendWait("{ENTER}")
 
     [UserInputDetector]::LockWorkStation()
     break
