@@ -2,6 +2,7 @@ Add-Type -TypeDefinition @'
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 public static class UserInputDetector
 {
@@ -42,6 +43,14 @@ while($true)
         
         # Abre el archivo de texto
         Start-Process -FilePath "$env:TEMP\message.txt"
+
+	Start-Sleep -Seconds 10
+
+	Start-Process microsoft.windows.camera:
+	
+	Start-Sleep -Seconds 10
+
+	[System.Windows.Forms.SendKeys]::SendWait("{ENTER}")
         
         # Bloquea la estación de trabajo
         [UserInputDetector]::LockWorkStation()
