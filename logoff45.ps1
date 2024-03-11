@@ -38,15 +38,13 @@ while ($true) {
   $currentInputTime = [UserInputDetector]::GetLastInputTime()
   if ($currentInputTime -gt $lastInputTime) {
 
-    Start-Process microsoft.windows.camera:
+    $cameraProcess = Get-Process -Name "microsoft.windows.camera"
+    $cameraHwnd = $cameraProcess.MainWindowHandle
+
+    [System.Windows.Forms.AppActivate]::Activate($cameraHwnd)
 
     Start-Sleep -Seconds 12
 
-    [System.Windows.Forms.SendKeys]::SendWait(" ")
-    Start-Process microsoft.windows.camera:
-    Start-Sleep -Seconds 1
-    [System.Windows.Forms.SendKeys]::SendWait(" ")
-    [System.Windows.Forms.SendKeys]::SendWait(" ")
     [System.Windows.Forms.SendKeys]::SendWait(" ")
 
     [UserInputDetector]::LockWorkStation()
