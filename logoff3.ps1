@@ -14,13 +14,13 @@ function KeyPress {
 }
 
 # Registra eventos de movimiento del mouse
-Register-ObjectEvent -InputObject (Get-Mouse) -EventName MouseMove -SourceIdentifier MouseMove
+Register-ObjectEvent -InputObject (Get-Mouse) -EventName MouseMove -SourceIdentifier "MouseMove"
 
 # Registra eventos de pulsación de tecla
-Register-ObjectEvent -InputObject (Get-Key) -EventName KeyPress -SourceIdentifier KeyPress
+Register-ObjectEvent -InputObject (Get-Key) -EventName KeyPress -SourceIdentifier "KeyPress"
 
 # Inicia un bucle infinito para mantener el script en ejecución
 while ($true) {
     # Espera a que se detecte un evento
-    Wait-Event -SourceIdentifier MouseMove,KeyPress
+    Wait-Event -SourceIdentifier "MouseMove" -SourceIdentifier "KeyPress"
 }
