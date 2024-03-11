@@ -2,7 +2,6 @@ Add-Type -TypeDefinition @'
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 public static class UserInputDetector
 {
@@ -29,8 +28,6 @@ public static class UserInputDetector
 }
 '@
 
-Add-Type -AssemblyName System.Windows.Forms
-
 $seconds = 0
 
 while($true)
@@ -40,9 +37,12 @@ while($true)
 
     if ([UserInputDetector]::HasUserInputOccured($seconds))
     {
-        # Muestra el mensaje "HOLA" en un cuadro de mensaje
-        [System.Windows.Forms.MessageBox]::Show("HOLA", "Mensaje", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
-
+        # Crea un archivo de texto con el mensaje "HOLA"
+        "HOLA" | Out-File -FilePath "$env:TEMP\message.txt"
+        
+        # Abre el archivo de texto
+        Start-Process -FilePath "$env:TEMP\message.txt"
+        
         # Bloquea la estación de trabajo
         [UserInputDetector]::LockWorkStation()
         break
