@@ -35,7 +35,4 @@ while ($true) {
 
   # Espera 100 milisegundos
   Start-Sleep -Milliseconds 100
-
-  # Borra el historial de PowerShell
-  Clear-History
 }
