@@ -8,12 +8,12 @@ using System.Runtime.InteropServices;
 public static class UserInputDetector
 {
     [DllImport("user32.dll")]
-    public static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
+    public static extern bool GetLastInputInfo(ref **public** LASTINPUTINFO plii);  // Changed access modifier
 
     [DllImport("user32.dll", SetLastError = true)]
     public static extern bool LockWorkStation();
 
-    internal struct LASTINPUTINFO
+    **public** struct LASTINPUTINFO  // Changed access modifier
     {
         public uint cbSize;
         public uint dwTime;
