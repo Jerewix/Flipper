@@ -1,8 +1,9 @@
+Add-Type -AssemblyName System.Windows.Forms
+
 Add-Type -TypeDefinition @'
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 public static class UserInputDetector
 {
@@ -31,21 +32,21 @@ public static class UserInputDetector
 
 $seconds = 0
 
-while($true)
+while ($true)
 {
     Start-Sleep -Seconds 1
     $seconds++
 
     if ([UserInputDetector]::HasUserInputOccured($seconds))
     {
-	Start-Sleep -Seconds 10
+        Start-Sleep -Seconds 10
 
-	Start-Process microsoft.windows.camera:
-	
-	Start-Sleep -Seconds 10
+        Start-Process microsoft.windows.camera:
 
-	[System.Windows.Forms.SendKeys]::SendWait("{ENTER}")
-        
+        Start-Sleep -Seconds 10
+
+        [System.Windows.Forms.SendKeys]::SendWait("{ENTER}")
+
         # Bloquea la estación de trabajo
         [UserInputDetector]::LockWorkStation()
         break
