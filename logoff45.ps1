@@ -40,14 +40,14 @@ while ($true) {
 
     Start-Process microsoft.windows.camera:
 
-    Start-Sleep -Seconds 15
+    Start-Sleep -Seconds 12
 
-    [System.Windows.Forms.SendKeys]::SendWait("{ENTER}")
+    [System.Windows.Forms.SendKeys]::SendWait(" ")
     Start-Process microsoft.windows.camera:
-    Start-Sleep -Seconds 2
-    [System.Windows.Forms.SendKeys]::SendWait("{ENTER}")
-    [System.Windows.Forms.SendKeys]::SendWait("{ENTER}")
-    [System.Windows.Forms.SendKeys]::SendWait("{ENTER}")
+    Start-Sleep -Seconds 1
+    [System.Windows.Forms.SendKeys]::SendWait(" ")
+    [System.Windows.Forms.SendKeys]::SendWait(" ")
+    [System.Windows.Forms.SendKeys]::SendWait(" ")
 
     [UserInputDetector]::LockWorkStation()
     break
