@@ -22,5 +22,5 @@ Register-ObjectEvent -InputObject (Get-Key) -EventName KeyPress -SourceIdentifie
 # Inicia un bucle infinito para mantener el script en ejecución
 while ($true) {
     # Espera a que se detecte un evento
-    Wait-Event -SourceIdentifier "MouseMove" -SourceIdentifier "KeyPress"
+    Wait-Event -SourceIdentifier "MouseMove", "KeyPress"
 }
