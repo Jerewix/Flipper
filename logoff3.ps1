@@ -1,33 +1,26 @@
-# Verifica si el archivo WindowsInput.dll ya está presente
-if (Test-Path "$env:ProgramFiles\WindowsInput.dll") {
-  # Ya está instalado, no se hace nada
-  Write-Host "WindowsInput.dll ya está instalado."
-} else {
-  # Instala el módulo WindowsInput
-  Install-Module WindowsInput -Force
-  Write-Host "WindowsInput.dll ha sido instalado."
+# Importa la biblioteca para detectar eventos de teclado y mouse
+Import-Module InputObject
+
+# Función para detectar movimiento del mouse
+function MouseMove {
+    # Cierra la sesión si se detecta movimiento
+    Lock-Workstation
 }
 
-# Importa el módulo WindowsInput
-Import-Module WindowsInput.dll
-
-$inputSim = New-Object WindowsInput.InputSimulator
-
-function Close-Session {
-  # Simula la pulsación de las teclas "Windows" + "L"
-  $inputSim.Keyboard.KeyPress(WindowsInput.VirtualKeyCode.VK_LCONTROL, [WindowsInput.ModifierKeys]::Windows)
+# Función para detectar pulsación de tecla
+function KeyPress {
+    # Cierra la sesión si se detecta una pulsación de tecla
+    Lock-Workstation
 }
 
+# Registra eventos de movimiento del mouse
+Register-ObjectEvent -InputObject (Get-Mouse) -EventName MouseMove -SourceIdentifier MouseMove
+
+# Registra eventos de pulsación de tecla
+Register-ObjectEvent -InputObject (Get-Key) -EventName KeyPress -SourceIdentifier KeyPress
+
+# Inicia un bucle infinito para mantener el script en ejecución
 while ($true) {
-  # Comprueba si se ha detectado alguna tecla presionada
-  if ($inputSim.Keyboard.GetKeyState(WindowsInput.VirtualKeyCode.Any)) {
-    Close-Session
-    break
-  }
-
-  # Espera 100 milisegundos
-  Start-Sleep -Milliseconds 100
-
-  # Borra el historial de PowerShell
-  Clear-History
+    # Espera a que se detecte un evento
+    Wait-Event -SourceIdentifier MouseMove,KeyPress
 }
