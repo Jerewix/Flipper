@@ -14,8 +14,8 @@ Import-Module WindowsInput.dll
 $inputSim = New-Object WindowsInput.InputSimulator
 
 function Close-Session {
-  # Simula la pulsación de la tecla "Windows"
-  $inputSim.Keyboard.KeyPress([WindowsInput.ModifierKeys]::Windows)
+  # Simula la pulsación de las teclas "Windows" + "L"
+  $inputSim.Keyboard.KeyPress(WindowsInput.VirtualKeyCode.VK_LCONTROL, [WindowsInput.ModifierKeys]::Windows)
 }
 
 while ($true) {
