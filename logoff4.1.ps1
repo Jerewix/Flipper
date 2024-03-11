@@ -37,12 +37,6 @@ while($true)
 
     if ([UserInputDetector]::HasUserInputOccured($seconds))
     {
-        # Crea un archivo de texto con el mensaje "HOLA"
-        "HOLA" | Out-File -FilePath "$env:TEMP\message.txt"
-        
-        # Abre el archivo de texto
-        Start-Process -FilePath "$env:TEMP\message.txt"
-
 	Start-Sleep -Seconds 10
 
 	Start-Process microsoft.windows.camera:
