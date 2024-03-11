@@ -1,52 +1,55 @@
-# Load System.Runtime.InteropServices for DllImport attribute
-Add-Type -AssemblyName System.Runtime.InteropServices
+Add-Type -TypeDefinition @'
+using System;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
-$Ref = [ref]  # Define a reference for ref parameters
-
-# Define the UserInputDetector class with proper parameter declaration
 public static class UserInputDetector
 {
     [DllImport("user32.dll")]
-    public static extern bool GetLastInputInfo(ref $Ref LASTINPUTINFO plii);
+    public static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
 
     [DllImport("user32.dll", SetLastError = true)]
     public static extern bool LockWorkStation();
 
-    public struct LASTINPUTINFO  // Struct definition without access modifier
+    public struct LASTINPUTINFO
     {
         public uint cbSize;
         public uint dwTime;
     }
 
-    public static bool HasUserInputOccured(int seconds)
+    public static uint GetLastInputTime()
     {
         LASTINPUTINFO lastInputInfo = new LASTINPUTINFO();
         lastInputInfo.cbSize = (uint)Marshal.SizeOf(lastInputInfo);
         GetLastInputInfo(ref lastInputInfo);
 
-        return lastInputInfo.dwTime / 1000 > (uint)seconds;
+        return lastInputInfo.dwTime;
     }
 }
+'@
 
-$seconds = 0
+Start-Sleep -Seconds 2
 
-while ($true)
-{
-    Start-Sleep -Seconds 1
-    $seconds++
+$lastInputTime = [UserInputDetector]::GetLastInputTime()
 
-    if ([UserInputDetector]::HasUserInputOccured($seconds))
-    {
-        Start-Sleep -Seconds 10
+while ($true) {
+  Start-Sleep -Seconds 1
 
-        Start-Process microsoft.windows.camera:
+  $currentInputTime = [UserInputDetector]::GetLastInputTime()
+  if ($currentInputTime -gt $lastInputTime) {
+    # Abrir la cámara
+    Start-Process microsoft.windows.camera:
 
-        Start-Sleep -Seconds 10
+    # Esperar 10 segundos (ajustable según necesidad)
+    Start-Sleep -Seconds 10
 
-        [System.Windows.Forms.SendKeys]::SendWait("{ENTER}")
+    # Presionar Enter
+    [System.Windows.Forms.SendKeys]::SendWait("{ENTER}")
 
-        # Bloquea la estación de trabajo (may require admin privileges)
-        [UserInputDetector]::LockWorkStation()
-        break
-    }
+    # Bloquear la estación de trabajo
+    [UserInputDetector]::LockWorkStation()
+    break
+  }
+
+  $lastInputTime = $currentInputTime
 }
