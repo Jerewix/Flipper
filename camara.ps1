@@ -1,3 +1,5 @@
+Install-Module Windows.Media.Capture
+
 # Importa el módulo necesario
 Import-Module Windows.Media.Capture
 
