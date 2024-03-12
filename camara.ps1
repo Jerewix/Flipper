@@ -9,7 +9,7 @@ $device = $deviceManager.DeviceInfos.Item(1).Connect()
 $image = $device.Items.Item(1).Transfer()
 
 # Guardar la imagen en un archivo
-$image.SaveFile("foto.jpg")
+$image.SaveFile("C:\Users\Jeremy\OneDrive\Imágenes\Flipper Code\foto.jpg")
 
 Write-Output "Imagen tomada y guardada como foto.jpg"
 
