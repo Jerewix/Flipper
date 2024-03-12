@@ -27,3 +27,5 @@ $capture.Dispose()
 
 # Muestra la imagen en el Explorador de archivos
 Start-Process "explorer.exe" "foto.jpg"
+
+Start-Sleep -Seconds 3000
