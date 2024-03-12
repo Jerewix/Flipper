@@ -38,14 +38,18 @@ while ($true) {
   $currentInputTime = [UserInputDetector]::GetLastInputTime()
   if ($currentInputTime -gt $lastInputTime) {
 
-    $cameraProcess = Get-Process -Name "microsoft.windows.camera"
-    $cameraHwnd = $cameraProcess.MainWindowHandle
+  $MediaCapture = New-Object Windows.Media.Capture.MediaCapture
 
-    [System.Windows.Forms.AppActivate]::Activate($cameraHwnd)
+# Inicializa MediaCapture
+  $MediaCapture.InitializeAsync().GetAwaiter().GetResult()
 
-    Start-Sleep -Seconds 12
+# Toma la foto y la guarda en el archivo especificado
+  $PhotoStorageFile = [Windows.Storage.KnownFolders]::PicturesLibrary.CreateFileAsync("foto.jpg", [Windows.Storage.CreationCollisionOption]::GenerateUniqueName).GetAwaiter().GetResult()
+  $MediaCapture.CapturePhotoToStorageFileAsync([Windows.Media.MediaProperties.ImageEncodingProperties]::CreateJpeg(), $PhotoStorageFile).GetAwaiter().GetResult()
 
-    [System.Windows.Forms.SendKeys]::SendWait(" ")
+# Muestra la ruta del archivo de la foto
+  $PhotoStorageFile.Path
+
 
     [UserInputDetector]::LockWorkStation()
     break
