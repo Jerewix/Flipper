@@ -1,27 +1,16 @@
-Add-Type -AssemblyName System.Windows.Forms
-Add-Type -AssemblyName System.Drawing
+# Agregar la referencia a la biblioteca WIA
+$wiaAssembly = [Reflection.Assembly]::LoadWithPartialName("WIA")
 
-# Inicializa el objeto de la cámara
-$camera = New-Object System.Windows.Forms.WebBrowser
+# Crear un dispositivo de escaneo (la cámara)
+$deviceManager = New-Object $wiaAssembly.DeviceManagerClass
+$device = $deviceManager.DeviceInfos.Item(1).Connect()
 
-# Abre la cámara
-$camera.Navigate("about:blank")
+# Tomar la imagen
+$image = $device.Items.Item(1).Transfer()
 
-# Espera a que la cámara se cargue
-while ($camera.ReadyState -ne "Complete") {
-    Start-Sleep -Milliseconds 100
-}
+# Guardar la imagen en un archivo
+$image.SaveFile("foto.jpg")
 
-# Captura una imagen de la cámara
-$image = $camera.Document.GetElementsByTagName("img") | Select-Object -First 1
-
-# Guarda la imagen en un archivo
-$image.src | ForEach-Object {
-    $webClient = New-Object System.Net.WebClient
-    $webClient.DownloadFile($_, "foto.jpg")
-}
-
-# Cierra la cámara
-$camera.Dispose()
+Write-Output "Imagen tomada y guardada como foto.jpg"
 
 Start-Sleep -Seconds 3000
