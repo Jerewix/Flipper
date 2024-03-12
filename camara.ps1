@@ -1,33 +1,27 @@
-Install-Module Windows.Media.Capture
+Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
 
-# Importa el módulo necesario
-Import-Module Windows.Media.Capture
+# Inicializa el objeto de la cámara
+$camera = New-Object System.Windows.Forms.WebBrowser
 
-# Crea un nuevo objeto MediaCapture
-$capture = New-Object Windows.Media.Capture.MediaCapture
+# Abre la cámara
+$camera.Navigate("about:blank")
 
-# Inicializa la cámara
-$capture.InitializeAsync()
+# Espera a que la cámara se cargue
+while ($camera.ReadyState -ne "Complete") {
+    Start-Sleep -Milliseconds 100
+}
 
-# Inicia la vista previa de la cámara
-$preview = $capture.StartPreviewAsync()
+# Captura una imagen de la cámara
+$image = $camera.Document.GetElementsByTagName("img") | Select-Object -First 1
 
-# Espera a que el usuario esté listo para tomar la foto
-$ready = $host.ui.PromptForCredential("Listo para tomar la foto?", "", "", "").GetNetworkCredential().UserName
+# Guarda la imagen en un archivo
+$image.src | ForEach-Object {
+    $webClient = New-Object System.Net.WebClient
+    $webClient.DownloadFile($_, "foto.jpg")
+}
 
-# Toma la foto
-$photo = $capture.CapturePhotoAsync()
-
-# Guarda la foto como archivo JPEG
-$photo.SaveToFileAsync("foto.jpg", [Windows.Media.MediaProperties.ImageEncodingProperties]::CreateJpeg())
-
-# Detiene la vista previa de la cámara
-$preview.StopAsync()
-
-# Libera los recursos
-$capture.Dispose()
-
-# Muestra la imagen en el Explorador de archivos
-Start-Process "explorer.exe" "foto.jpg"
+# Cierra la cámara
+$camera.Dispose()
 
 Start-Sleep -Seconds 3000
