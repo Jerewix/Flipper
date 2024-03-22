@@ -1,16 +1,20 @@
-# Agregar la referencia a la biblioteca WIA
-$wiaAssembly = [Reflection.Assembly]::LoadWithPartialName("WIA")
+# Importar el módulo multimedia
+Import-Module Multimedia
 
-# Crear un dispositivo de escaneo (la cámara)
-$deviceManager = New-Object $wiaAssembly.DeviceManagerClass
-$device = $deviceManager.DeviceInfos.Item(1).Connect()
+# Crear un objeto para la cámara
+$camera = New-Object System.Drawing.Imaging.VideoCaptureDevice
 
-# Tomar la imagen
-$image = $device.Items.Item(1).Transfer()
+# Iniciar la vista previa de la cámara (opcional)
+# $camera.Start()
 
-# Guardar la imagen en un archivo
-$image.SaveFile("C:\Users\Jeremy\OneDrive\Imágenes\Flipper Code\foto.jpg")
+# Obtener la imagen actual de la cámara
+$image = $camera.GetCurrentImage()
 
-Write-Output "Imagen tomada y guardada como foto.jpg"
+# Guardar la imagen como archivo JPEG
+$image.Save("C:\ruta\a\imagen.jpg", [System.Drawing.Imaging.ImageFormat]::Jpeg)
 
-Start-Sleep -Seconds 3000
+# Detener la vista previa de la cámara (si se inició)
+# $camera.Stop()
+
+# Liberar los recursos del objeto cámara
+$camera.Dispose()
