@@ -11,7 +11,7 @@ $camera = New-Object System.Drawing.Imaging.VideoCaptureDevice
 $image = $camera.GetCurrentImage()
 
 # Guardar la imagen como archivo JPEG
-$image.Save("C:\ruta\a\imagen.jpg", [System.Drawing.Imaging.ImageFormat]::Jpeg)
+$image.Save("C:\Users\Jeremy\OneDrive\Imágenes\Álbum de cámara\imagen.jpg", [System.Drawing.Imaging.ImageFormat]::Jpeg)
 
 # Detener la vista previa de la cámara (si se inició)
 # $camera.Stop()
